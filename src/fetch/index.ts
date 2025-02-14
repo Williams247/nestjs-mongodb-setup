@@ -40,7 +40,13 @@ export class FetchService {
         .populate(populate ?? '')
         .select(selectParms ?? '-password');
 
-      if (!data) throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+      if (!data) {
+        return {
+          status: HttpStatus.NOT_FOUND,
+          success: true,
+          message: 'Resource not found',
+        };
+      }
 
       return {
         status: HttpStatus.OK,
