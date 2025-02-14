@@ -1,5 +1,4 @@
-import { Body, Controller, Get, HttpStatus, Post, Res } from '@nestjs/common';
-import { Response } from 'express';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { FetchService } from '../fetch';
 

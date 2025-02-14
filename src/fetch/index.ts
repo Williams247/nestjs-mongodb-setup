@@ -60,6 +60,7 @@ export class FetchService {
         },
       };
     } catch (error) {
+      console.log(error);
       throw new HttpException(
         'An error occured',
         HttpStatus.INTERNAL_SERVER_ERROR,
