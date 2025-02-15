@@ -5,6 +5,7 @@ function connectMongoose() {
   return MongooseModule.forRootAsync({
     useFactory: function () {
       const uri = 'mongodb://localhost:27017/todos';
+      
       mongoose.connection.once('open', function () {
         console.log('MongoDB connection established successfully!');
       });
@@ -13,11 +14,7 @@ function connectMongoose() {
         console.error('MongoDB connection error:', error);
       });
 
-      return {
-        uri,
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      };
+      return { uri };
     },
   });
 }
