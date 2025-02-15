@@ -7,6 +7,7 @@ import { FetchService } from '../fetch/index.service';
 
 @Module({
   imports: [
+    // Todos.name -> returns the class name, TodosSchema -> return the actual mongo schema (name + schema)
     MongooseModule.forFeature([{ name: Todos.name, schema: TodosSchema }]),
   ],
   controllers: [TodosController],
