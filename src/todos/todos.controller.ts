@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { TodosService } from './todos.service';
-import { FetchService } from '../fetch';
+import { FetchService } from '../fetch/index.service';
 
 @Controller('todos')
 export class TodosController {

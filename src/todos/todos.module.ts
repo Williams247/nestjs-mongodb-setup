@@ -3,7 +3,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Todos, TodosSchema } from '../schema/todos.schema';
 import { TodosController } from './todos.controller';
 import { TodosService } from './todos.service';
-import { FetchService } from '../fetch';
+import { FetchService } from '../fetch/index.service';
 
 @Module({
   imports: [
