@@ -3,6 +3,6 @@ import { TodosModule } from './todos/todos.module';
 import { runConnection } from './schema/db.config';
 
 @Module({
-  imports: [runConnection, TodosModule],
+  imports: [runConnection, TodosModule]
 })
 export class AppModule {}
