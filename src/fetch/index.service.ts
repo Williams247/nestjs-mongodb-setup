@@ -2,13 +2,15 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Todos } from '../schema/todos.schema';
-import { FetchProps, ServiceResponseType } from './types';
+import { FetchProps } from './types';
+import { ServiceResponseType } from '../types';
 
 @Injectable()
 export class FetchService {
   private modelMap: Record<string, Model<any>>;
 
   constructor(
+    // Inject model to service so the service can make use of the model
     @InjectModel(Todos.name) private readonly todoModel: Model<Todos>,
   ) {
     this.modelMap = {
