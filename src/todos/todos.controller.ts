@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { TodosService } from './todos.service';
 import { FetchService } from '../provider/fetch.service';
+import { DbSchema } from '../provider/types'
 
 @Controller('todos')
 export class TodosController {
@@ -11,7 +12,7 @@ export class TodosController {
 
   @Get()
   async getTodos() {
-    return this.fetchService.fetch({ modelName: 'Todos' });
+    return this.fetchService.fetch({ modelName: DbSchema.TODOS });
   }
 
   @Post()

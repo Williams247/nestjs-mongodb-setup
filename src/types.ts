@@ -1,15 +1,16 @@
-import { HttpStatus } from '@nestjs/common';
-
-export interface FetchResponsePayload {
-  totalItems?: number;
-  currentPage?: number;
-  pages?: number;
-  results: any;
+export interface UserPayload {
+  id?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  image?: string;
+  verified?: boolean;
+  role: string;
+  disabled?: boolean;
 }
 
-export interface ServiceResponseType {
-  status: HttpStatus;
-  success: boolean;
-  message: string;
-  data?: FetchResponsePayload | null;
+export enum Role {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
 }

@@ -2,9 +2,9 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Todos } from '../schema/todos.schema';
+import { User } from '../schema/user.schema';
 import { FetchProps } from './types';
-import { ServiceResponseType } from '../types';
-
+import { ServiceResponseType, FetchOneProps, DbSchema } from './types';
 @Injectable()
 export class FetchService {
   private modelMap: Record<string, Model<any>>;
@@ -12,10 +12,52 @@ export class FetchService {
   constructor(
     // Inject model to service so the service can make use of the model
     @InjectModel(Todos.name) private readonly todoModel: Model<Todos>,
+    @InjectModel(User.name) private readonly userModel: Model<User>,
   ) {
     this.modelMap = {
-      Todos: this.todoModel,
+      [DbSchema.TODOS]: this.todoModel,
+      [DbSchema.USER]: this.userModel,
     };
+  }
+
+  async fetchOne({
+    modelName,
+    searchParams,
+    selectParms,
+    populate,
+    message,
+  }: FetchOneProps): Promise<ServiceResponseType> {
+    try {
+      const model = this.modelMap[modelName];
+      if (!model) throw new Error('Model name is required');
+
+      const data = await model
+        .findOne(searchParams)
+        .populate(populate ?? '')
+        .select(selectParms ?? '-password');
+
+      if (!data) {
+        return {
+          status: HttpStatus.NOT_FOUND,
+          success: false,
+          message: message ?? 'Resource not found',
+          data: null,
+        };
+      }
+
+      return {
+        status: HttpStatus.OK,
+        success: true,
+        message: message ?? 'Success',
+        data: data,
+      };
+    } catch (error) {
+      console.log(error);
+      throw new HttpException(
+        'An error occured',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async fetch({
@@ -25,13 +67,14 @@ export class FetchService {
     searchParams,
     populate,
     selectParms,
+    message,
   }: FetchProps): Promise<ServiceResponseType> {
     try {
       const pageRequest = Number(page ?? 1);
       const limitRequest = Number(limit ?? 10);
 
       const model = this.modelMap[modelName];
-      if (!model) throw new Error('Model name is requird');
+      if (!model) throw new Error('Model name is required');
 
       const count = await model.countDocuments();
 
@@ -45,15 +88,15 @@ export class FetchService {
       if (!data) {
         return {
           status: HttpStatus.NOT_FOUND,
-          success: true,
-          message: 'Resource not found',
+          success: false,
+          message: message ?? 'Resource not found',
         };
       }
 
       return {
         status: HttpStatus.OK,
         success: true,
-        message: 'Success',
+        message: message ?? 'Success',
         data: {
           totalItems: count,
           currentPage: pageRequest,

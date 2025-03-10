@@ -1,8 +1,8 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
-import { Todos } from '../schema/todos.schema';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ServiceResponseType } from '../types';
+import { Todos } from '../schema/todos.schema';
+import { ServiceResponseType } from '../provider/types';
 
 @Injectable()
 export class TodosService {
@@ -27,7 +27,11 @@ export class TodosService {
         message: 'Todo created',
       };
     } catch (error) {
-      throw error;
+      console.log(error);
+      throw new HttpException(
+        'An error occured',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }
