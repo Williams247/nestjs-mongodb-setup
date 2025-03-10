@@ -4,9 +4,9 @@ import { TodosService } from './todos.service';
 import { FetchService } from '../provider/fetch.service';
 import { DatabaseConfig } from '../schema/db.config';
 @Module({
-  imports: [DatabaseConfig.getRegisteredSchema()],
+  imports: [DatabaseConfig.getSharedSchema()],
   controllers: [TodosController],
   providers: [TodosService, FetchService],
-  exports: [DatabaseConfig.getRegisteredSchema()],
+  exports: [DatabaseConfig.getSharedSchema()],
 })
 export class TodosModule {}

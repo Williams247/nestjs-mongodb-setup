@@ -26,7 +26,7 @@ export class DatabaseConfig {
     });
   }
 
-  static getRegisteredSchema() {
+  static getSharedSchema() {
     // Todos.name -> returns the class name, TodosSchema -> return the actual mongo schema (name + schema)
     return MongooseModule.forFeature([
       { name: Todos.name, schema: TodosSchema },

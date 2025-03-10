@@ -6,9 +6,9 @@ import { FetchService } from '../provider/fetch.service';
 import { DatabaseConfig } from '../schema/db.config'
 
 @Module({
-  imports: [DatabaseConfig.getRegisteredSchema()],
+  imports: [DatabaseConfig.getSharedSchema()],
   controllers: [AuthController],
   providers: [AuthService, FetchService],
-  exports: [DatabaseConfig.getRegisteredSchema()]
+  exports: [DatabaseConfig.getSharedSchema()]
 })
 export class AuthModule {}
