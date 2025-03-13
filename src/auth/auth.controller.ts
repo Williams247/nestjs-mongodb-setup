@@ -1,19 +1,22 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, Post, UsePipes } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { UserPayload } from '../types';
-import { Role } from '../types'
-
+import { CreateUserSchema, CreateUserType } from './auth-schema';
+import { ZodValidationPipe } from '../utils/zod-validate-pipe';
 @Controller('auth')
 export class AuthController {
   constructor(private todoService: AuthService) {}
   @Post('/register')
-  register(@Body() { firstName, lastName, email, password }: UserPayload) {
+  @UsePipes(new ZodValidationPipe(CreateUserSchema))
+  register(
+    @Body() { first_name, last_name, email, password, role }: CreateUserType,
+  ) {
     return this.todoService.registerUser({
-      firstName,
-      lastName,
+      first_name,
+      last_name,
       email,
       password,
-      role: Role.USER,
+      role: role,
+      verified: false
     });
   }
 }

@@ -1,19 +1,19 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
-import { Role } from '../types';
+import { Role } from '../utils/types';
 
 @Schema()
 export class User {
   @Prop({ required: true })
-  firstName: string;
+  first_name: string;
   @Prop({ required: true })
-  lastName: string;
+  last_name: string;
   @Prop({ required: true })
   email: string;
   @Prop({ required: true })
   password: string;
   @Prop({ required: false })
   image: string;
-  @Prop({ required: false })
+  @Prop({ required: true })
   verified: boolean;
   @Prop({ required: true })
   role: Role;

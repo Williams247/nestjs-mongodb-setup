@@ -7,18 +7,19 @@ import {
 } from '@nestjs/common';
 import JWT from 'jsonwebtoken';
 import { InjectModel } from '@nestjs/mongoose';
-import bcrypt from 'bcryptjs';
+import * as bcrypt from 'bcrypt';
 import { User } from '../schema/user.schema';
 import { FetchService } from '../provider/fetch.service';
 import { ServiceResponseType, DbSchema } from '../provider/types';
-import { UserPayload } from '../types';
+import { Role } from '../utils/types';
+import { CreateUserType } from './auth-schema';
 import { Model } from 'mongoose';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>,
-    private fetchService: FetchService,
+    @InjectModel(User.name) private readonly userModel: Model<User>, // Inject a model based on the schema type
+    private fetchService: FetchService, // Inject a share or generic service
   ) {}
 
   async loginUser(
@@ -71,22 +72,26 @@ export class AuthService {
     }
   }
 
-  async registerUser(payload: UserPayload): Promise<ServiceResponseType> {
+  async registerUser(payload: CreateUserType): Promise<ServiceResponseType> {
     try {
       const signUpResponse = await this.fetchService.fetchOne({
         modelName: DbSchema.USER,
-        searchParams: { email: payload.email },
+        searchParams: { email: payload.email, role: payload.role },
       });
 
-      if (signUpResponse.status) {
-        throw new HttpException('Email taken', HttpStatus.CONFLICT);
-      }
+      // if (
+      //   signUpResponse.data.role === Role.ADMIN &&
+      //   signUpResponse.data.results.length > 1
+      // ) {
+      //   throw new HttpException('Admin already exist', HttpStatus.CONFLICT);
+      // }
 
-      if (signUpResponse.data.role === payload.role) {
-        throw new HttpException('An admin exists', HttpStatus.CONFLICT);
-      }
+      // if (signUpResponse.status === HttpStatus.OK) {
+      //   throw new HttpException('Email taken', HttpStatus.CONFLICT);
+      // }
 
-      const hashPassword = await bcrypt.hash(payload.password as string, 10);
+      const hashPassword = await bcrypt.hash(payload.password ?? '', 10);
+
       const signupUser = new this.userModel({
         ...payload,
         password: hashPassword,

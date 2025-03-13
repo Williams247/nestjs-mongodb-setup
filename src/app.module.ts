@@ -1,11 +1,12 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TodosModule } from './todos/todos.module';
 import { DatabaseConfig } from './schema/db.config';
 import { AuthPass } from './middleware/auth.middleware';
 import { TodosController } from './todos/todos.controller';
 import { AdminModule } from './admin/admin.module';
 import { AdminController } from './admin/admin.controller';
-import { Role } from './types';
+import { Role } from './utils/types';
 import { AuthModule } from './auth/auth.module';
 
 @Module({
@@ -14,6 +15,10 @@ import { AuthModule } from './auth/auth.module';
     AdminModule,
     TodosModule,
     AuthModule,
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
   ],
 })
 export class AppModule implements NestModule {

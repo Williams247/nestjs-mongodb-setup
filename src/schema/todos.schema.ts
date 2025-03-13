@@ -12,5 +12,3 @@ export class Todos {
 
 // Create an actual mongoose schema from the Todos class
 export const TodosSchema = SchemaFactory.createForClass(Todos);
-
-// Todos.name => Todos, Todos being the className

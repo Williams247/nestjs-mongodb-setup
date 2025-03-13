@@ -6,7 +6,7 @@ export class DatabaseConfig {
   static runConnection() {
     return MongooseModule.forRootAsync({
       useFactory: async function () {
-        const uri = 'mongodb://localhost:27017/todos';
+        const uri = process.env.MONGODB_URI;
 
         return {
           uri,

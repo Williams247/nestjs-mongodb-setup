@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as JWT from 'jsonwebtoken';
 import { UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Role } from '../types';
+import { Role } from '../utils/types';
 
 export interface Props {
   userType?: Role;
