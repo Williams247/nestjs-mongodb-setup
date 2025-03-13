@@ -38,7 +38,7 @@ export interface FetchOneProps {
 }
 
 export interface ServiceResponseType {
-  status: HttpStatus;
+  statusCode: HttpStatus;
   success: boolean;
   message: string;
   data?: FetchResponsePayload | any;

@@ -22,7 +22,7 @@ export class TodosService {
       await createTodo.save();
 
       return {
-        status: HttpStatus.CREATED,
+        statusCode: HttpStatus.CREATED,
         success: true,
         message: 'Todo created',
       };

@@ -38,7 +38,7 @@ export class FetchService {
 
       if (!data) {
         return {
-          status: HttpStatus.NOT_FOUND,
+          statusCode: HttpStatus.NOT_FOUND,
           success: false,
           message: message ?? 'Resource not found',
           data: null,
@@ -46,7 +46,7 @@ export class FetchService {
       }
 
       return {
-        status: HttpStatus.OK,
+        statusCode: HttpStatus.OK,
         success: true,
         message: message ?? 'Success',
         data: data,
@@ -87,14 +87,14 @@ export class FetchService {
 
       if (!data) {
         return {
-          status: HttpStatus.NOT_FOUND,
+          statusCode: HttpStatus.NOT_FOUND,
           success: false,
           message: message ?? 'Resource not found',
         };
       }
 
       return {
-        status: HttpStatus.OK,
+        statusCode: HttpStatus.OK,
         success: true,
         message: message ?? 'Success',
         data: {

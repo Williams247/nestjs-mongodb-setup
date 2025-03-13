@@ -18,7 +18,7 @@ export const CreateUserSchema = z.object({
     .string({ message: 'An email is required' })
     .email({ message: 'Enter a valid email' }),
   password: z
-    .string()
+    .string({ message: 'Password is required' })
     .min(8, { message: 'Password must be at least 8 characters long' })
     .regex(/[A-Z]/, {
       message: 'Password must contain at least one uppercase letter',
@@ -31,7 +31,7 @@ export const CreateUserSchema = z.object({
       message: 'Password must contain at least one special character (@$!%*?&)',
     }),
   image: z.string().optional(),
-  verified: z.boolean(),
+  verified: z.boolean().default(false),
   role: z.enum([Role.ADMIN, Role.USER], {
     message: `Role must be one of ${Role.ADMIN} or ${Role.USER}`,
   }),

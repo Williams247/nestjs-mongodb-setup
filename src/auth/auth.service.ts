@@ -1,10 +1,4 @@
-import {
-  Body,
-  HttpException,
-  HttpStatus,
-  Injectable,
-  Req,
-} from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import JWT from 'jsonwebtoken';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
@@ -22,21 +16,70 @@ export class AuthService {
     private fetchService: FetchService, // Inject a share or generic service
   ) {}
 
-  async loginUser(
-    @Req() request,
-    @Body() payload: { email: string; password: string },
-  ): Promise<ServiceResponseType> {
+  async registerUser(payload: CreateUserType): Promise<ServiceResponseType> {
+    try {
+      const signUpResponse = await this.fetchService.fetchOne({
+        modelName: DbSchema.USER,
+        searchParams: { email: payload.email, role: payload.role },
+      });
+
+      if (
+        signUpResponse.data &&
+        signUpResponse.data.role === Role.ADMIN &&
+        signUpResponse.data.results.length > 1
+      ) {
+        return {
+          statusCode: HttpStatus.CONFLICT,
+          success: false,
+          message: 'An admin already exist',
+        };
+      }
+
+      if (signUpResponse.statusCode === HttpStatus.OK) {
+        return {
+          statusCode: HttpStatus.CONFLICT,
+          success: false,
+          message: 'Email taken',
+        };
+      }
+
+      const hashPassword = await bcrypt.hash(payload.password ?? '', 10);
+
+      const signupUser = new this.userModel({
+        ...payload,
+        password: hashPassword,
+      });
+
+      await signupUser.save();
+
+      return {
+        statusCode: HttpStatus.CREATED,
+        success: true,
+        message: 'User Created',
+      };
+    } catch (error) {
+      console.log(error);
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        success: true,
+        message: 'An error occured',
+      };
+    }
+  }
+
+  async loginUser(payload): Promise<ServiceResponseType> {
     try {
       const loginResponse = await this.fetchService.fetchOne({
         modelName: DbSchema.USER,
         searchParams: { email: payload.email },
       });
 
-      if (!loginResponse.status) {
-        throw new HttpException(
-          'Wrong email or password',
-          HttpStatus.NOT_FOUND,
-        );
+      if (!loginResponse.statusCode) {
+        return {
+          statusCode: HttpStatus.CREATED,
+          success: true,
+          message: 'Wrong email or password',
+        };
       }
 
       const userPassword = await bcrypt.compare(
@@ -45,10 +88,11 @@ export class AuthService {
       );
 
       if (!userPassword) {
-        throw new HttpException(
-          'Wrong email or password',
-          HttpStatus.NOT_FOUND,
-        );
+        return {
+          statusCode: HttpStatus.CREATED,
+          success: true,
+          message: 'Wrong email or password',
+        };
       }
 
       const loginData = {
@@ -65,51 +109,11 @@ export class AuthService {
       };
     } catch (error) {
       console.log(error);
-      throw new HttpException(
-        'An error occured',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
-
-  async registerUser(payload: CreateUserType): Promise<ServiceResponseType> {
-    try {
-      const signUpResponse = await this.fetchService.fetchOne({
-        modelName: DbSchema.USER,
-        searchParams: { email: payload.email, role: payload.role },
-      });
-
-      // if (
-      //   signUpResponse.data.role === Role.ADMIN &&
-      //   signUpResponse.data.results.length > 1
-      // ) {
-      //   throw new HttpException('Admin already exist', HttpStatus.CONFLICT);
-      // }
-
-      // if (signUpResponse.status === HttpStatus.OK) {
-      //   throw new HttpException('Email taken', HttpStatus.CONFLICT);
-      // }
-
-      const hashPassword = await bcrypt.hash(payload.password ?? '', 10);
-
-      const signupUser = new this.userModel({
-        ...payload,
-        password: hashPassword,
-      });
-
-      await signupUser.save();
-
       return {
-        status: HttpStatus.CREATED,
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         success: true,
-        message: 'User Created',
+        message: 'An error occured',
       };
-    } catch (error) {
-      console.log(error);
-      throw new HttpException(
-        'An error occured',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
     }
   }
 }
