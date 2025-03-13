@@ -22,13 +22,6 @@ export interface FetchProps {
   selectParms?: selectParmsProps;
 }
 
-export interface FetchResponsePayload {
-  totalItems?: number;
-  currentPage?: number;
-  pages?: number;
-  results: any;
-}
-
 export interface FetchOneProps {
   modelName: DbSchema;
   searchParams: {};
@@ -37,6 +30,12 @@ export interface FetchOneProps {
   message?: string;
 }
 
+export interface FetchResponsePayload {
+  totalItems?: number;
+  currentPage?: number;
+  pages?: number;
+  results: any;
+}
 export interface ServiceResponseType {
   statusCode: HttpStatus;
   success: boolean;

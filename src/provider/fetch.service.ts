@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Todos } from '../schema/todos.schema';
@@ -53,10 +53,12 @@ export class FetchService {
       };
     } catch (error) {
       console.log(error);
-      throw new HttpException(
-        'An error occured',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: 'An error occured',
+      };
     }
   }
 
@@ -76,7 +78,7 @@ export class FetchService {
       const model = this.modelMap[modelName];
       if (!model) throw new Error('Model name is required');
 
-      const count = await model.countDocuments();
+      const count = await model.find({ ...searchParams }).countDocuments();
 
       const data = await model
         .find({ ...searchParams })
@@ -90,6 +92,7 @@ export class FetchService {
           statusCode: HttpStatus.NOT_FOUND,
           success: false,
           message: message ?? 'Resource not found',
+          data: null,
         };
       }
 
@@ -106,10 +109,11 @@ export class FetchService {
       };
     } catch (error) {
       console.log(error);
-      throw new HttpException(
-        'An error occured',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: 'An error occured',
+      };
     }
   }
 }

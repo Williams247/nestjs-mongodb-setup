@@ -18,22 +18,31 @@ export class AuthService {
 
   async registerUser(payload: CreateUserType): Promise<ServiceResponseType> {
     try {
+      if (payload.role === Role.ADMIN) {
+        // fetch to search ROLE because it is generic
+        const doesAdminExist = await this.fetchService.fetch({
+          modelName: DbSchema.USER,
+          searchParams: { role: payload.role },
+        });
+
+        if (
+          doesAdminExist.data &&
+          doesAdminExist.data.totalItems &&
+          doesAdminExist.data.totalItems > 0
+        ) {
+          return {
+            statusCode: HttpStatus.CONFLICT,
+            success: false,
+            message: 'An admin already exist',
+          };
+        }
+      }
+
+      // fetchOne to search becuase email is unique
       const signUpResponse = await this.fetchService.fetchOne({
         modelName: DbSchema.USER,
-        searchParams: { email: payload.email, role: payload.role },
+        searchParams: { email: payload.email },
       });
-
-      if (
-        signUpResponse.data &&
-        signUpResponse.data.role === Role.ADMIN &&
-        signUpResponse.data.results.length > 1
-      ) {
-        return {
-          statusCode: HttpStatus.CONFLICT,
-          success: false,
-          message: 'An admin already exist',
-        };
-      }
 
       if (signUpResponse.statusCode === HttpStatus.OK) {
         return {
