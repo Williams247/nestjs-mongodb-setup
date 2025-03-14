@@ -11,7 +11,7 @@ import { Role } from '../utils/types'
 export class UserController {
   constructor(private userService: UserService) {}
   @UseGuards(AuthGuard, RolesGuard)
-  // @Roles(Role.USER)
+  @Roles(Role.USER)
   @Get('/fetch-user')
   async getUser(@Req() req: UserIdType, @Res() res: Response) {
     const result = await this.userService.fetchUser(req.user.id);

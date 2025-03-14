@@ -81,9 +81,11 @@ export class AuthService {
     try {
       const loginResponse = await this.fetchService.fetchOne({
         modelName: DbSchema.USER,
-        selectParms: 'password',
+        selectParms: 'password role',
         searchParams: { email: payload.email },
       });
+
+      console.log(loginResponse);
 
       if (!loginResponse.statusCode) {
         return {
@@ -108,6 +110,7 @@ export class AuthService {
 
       const loginData = {
         id: loginResponse.data._id,
+        role: loginResponse.data.role,
       };
 
       const signedToken = await this.jwtService.signAsync(loginData);
