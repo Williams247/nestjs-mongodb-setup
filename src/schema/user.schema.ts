@@ -23,5 +23,3 @@ export class User {
 
 // Create an actual mongoose schema from the Todos class
 export const UserSchema = SchemaFactory.createForClass(User);
-
-// Todos.name => Todos, Todos being the className

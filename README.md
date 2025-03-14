@@ -101,3 +101,4 @@ Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
 ##  nest g module user-module -> Creates a module
 ##  nest g provider user-service -> Creates a provider
 ## nest g middleware auth-middleware -> Creates a middleware
+## nest g decorator decorator -> Create a decorator

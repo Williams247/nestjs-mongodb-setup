@@ -1,8 +1,9 @@
 import { MongooseModule } from '@nestjs/mongoose';
-import { Todos, TodosSchema } from './todos.schema';
-import { User, UserSchema } from './user.schema';
+import { Todos, TodosSchema } from '../schema/todos.schema';
+import { User, UserSchema } from '../schema/user.schema';
+export class DataBaseConfig {
+  constructor() {}
 
-export class DatabaseConfig {
   static runConnection() {
     return MongooseModule.forRootAsync({
       useFactory: async function () {
@@ -27,7 +28,6 @@ export class DatabaseConfig {
   }
 
   static getSharedSchema() {
-    // Todos.name -> returns the class name, TodosSchema -> return the actual mongo schema (name + schema)
     return MongooseModule.forFeature([
       { name: Todos.name, schema: TodosSchema },
       { name: User.name, schema: UserSchema },

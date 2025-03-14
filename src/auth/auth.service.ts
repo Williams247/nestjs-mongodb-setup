@@ -1,19 +1,20 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import JWT from 'jsonwebtoken';
+import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
+import { JwtService } from '@nestjs/jwt';
 import { User } from '../schema/user.schema';
 import { FetchService } from '../provider/fetch.service';
 import { ServiceResponseType, DbSchema } from '../provider/types';
 import { Role } from '../utils/types';
-import { CreateUserType } from './auth-schema';
-import { Model } from 'mongoose';
+import { CreateUserType } from './auth.validation';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(User.name) private readonly userModel: Model<User>, // Inject a model based on the schema type
-    private fetchService: FetchService, // Inject a share or generic service
+    @InjectModel(User.name) private readonly userModel: Model<User>,
+    private fetchService: FetchService,
+    private jwtService: JwtService,
   ) {}
 
   async registerUser(payload: CreateUserType): Promise<ServiceResponseType> {
@@ -80,6 +81,7 @@ export class AuthService {
     try {
       const loginResponse = await this.fetchService.fetchOne({
         modelName: DbSchema.USER,
+        selectParms: 'password',
         searchParams: { email: payload.email },
       });
 
@@ -108,9 +110,7 @@ export class AuthService {
         id: loginResponse.data._id,
       };
 
-      const signedToken = await JWT.sign(loginData, 'APP_SECRET', {
-        expiresIn: 3600,
-      });
+      const signedToken = await this.jwtService.signAsync(loginData);
 
       return {
         ...loginResponse,

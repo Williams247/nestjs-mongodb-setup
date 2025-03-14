@@ -6,7 +6,7 @@ import {
   CreateUserType,
   LoginSchema,
   LoginType,
-} from './auth-schema';
+} from './auth.validation';
 import { ZodValidationPipe } from '../utils/zod-validate-pipe';
 @Controller('auth')
 export class AuthController {

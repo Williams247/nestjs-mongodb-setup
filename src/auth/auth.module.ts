@@ -3,12 +3,12 @@ import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { FetchService } from '../provider/fetch.service';
-import { DatabaseConfig } from '../schema/db.config'
-
+import { DataBaseConfig } from '../schema/db.config';
+import { Config } from '../utils/config';
 @Module({
-  imports: [DatabaseConfig.getSharedSchema()],
+  imports: [DataBaseConfig.getSharedSchema(), Config.configureJWT()],
   controllers: [AuthController],
   providers: [AuthService, FetchService],
-  exports: [DatabaseConfig.getSharedSchema()]
+  exports: [DataBaseConfig.getSharedSchema(), Config.configureJWT()],
 })
 export class AuthModule {}
