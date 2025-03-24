@@ -53,7 +53,10 @@ export class AuthService {
         };
       }
 
-      const hashPassword = await bcrypt.hash(payload.password ?? '', 10);
+      const hashPassword = await bcrypt.hash(
+        payload.password,
+        process.env.ROUND_SALT as string,
+      );
 
       const signupUser = new this.userModel({
         ...payload,
@@ -87,11 +90,14 @@ export class AuthService {
 
       console.log(loginResponse);
 
-      if (!loginResponse.statusCode) {
+      if (
+        !loginResponse.success &&
+        loginResponse.statusCode === HttpStatus.NOT_FOUND
+      ) {
         return {
-          statusCode: HttpStatus.CREATED,
+          statusCode: HttpStatus.UNAUTHORIZED,
           success: true,
-          message: 'Wrong email or password',
+          message: 'Invalid email or password',
         };
       }
 
@@ -104,7 +110,7 @@ export class AuthService {
         return {
           statusCode: HttpStatus.CREATED,
           success: true,
-          message: 'Wrong email or password',
+          message: 'Invalid email or password',
         };
       }
 
