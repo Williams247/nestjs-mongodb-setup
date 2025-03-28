@@ -34,10 +34,10 @@ export class ZodValidationPipe implements PipeTransform {
     for (const key in formattedError) {
       // Ignores _errors: [] and checks for the first error and return it
 
-      const errorSchema = formattedError[0] as { _errors: Array<string> };
+      const errorSchema = formattedError[key] as { _errors: Array<string> };
 
       if (key !== '_errors' && errorSchema._errors.length > 0) {
-        return errorSchema; // Gets the target error by index (key and 0 under _errors[])
+        return errorSchema._errors[0]; // Gets the target error by index (key and 0 under _errors[])
       }
     }
 
