@@ -11,7 +11,13 @@ export class TodosService {
     @InjectModel(Todos.name) private readonly todoModel: Model<Todos>,
   ) {}
 
-  async createATodoList({ text, note }): Promise<ServiceResponseType> {
+  async createATodoList({
+    text,
+    note,
+  }: {
+    text: string;
+    note: string;
+  }): Promise<ServiceResponseType> {
     try {
       const createTodo = new this.todoModel({
         text,

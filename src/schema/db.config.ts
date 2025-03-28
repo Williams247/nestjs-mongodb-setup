@@ -6,21 +6,13 @@ export class DataBaseConfig {
 
   static runConnection() {
     return MongooseModule.forRootAsync({
-      useFactory: async function () {
+      useFactory: function () {
         const uri = process.env.MONGODB_URI;
 
         return {
           uri,
           connectionFactory: function (connection) {
-            connection.once('open', function () {
-              console.log('✅ MongoDB connection established successfully!');
-            });
-
-            connection.on('error', function (error) {
-              console.error('❌ MongoDB connection error:', error);
-            });
-
-            return connection;
+            return connection as Record<string, any>;
           },
         };
       },

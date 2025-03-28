@@ -24,7 +24,7 @@ export interface FetchProps {
 
 export interface FetchOneProps {
   modelName: DbSchema;
-  searchParams: {};
+  searchParams: Record<string, any>;
   selectParms?: selectParmsProps;
   populate?: PopulateRecord;
   message?: string;
@@ -40,5 +40,5 @@ export interface ServiceResponseType {
   statusCode: HttpStatus;
   success: boolean;
   message: string;
-  data?: FetchResponsePayload | any;
+  data?: Record<string, any> | null;
 }

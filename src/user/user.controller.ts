@@ -1,11 +1,11 @@
 import { Response } from 'express';
 import { Get, Req, Res, Controller, UseGuards } from '@nestjs/common';
-import { Roles } from "../decorator/role.decorator";
+import { Roles } from '../decorator/role.decorator';
 import { UserIdType } from './type';
 import { UserService } from './user.service';
 import { AuthGuard } from '../guard/auth.guard';
-import { RolesGuard } from '../guard/role.guard'
-import { Role } from '../utils/types'
+import { RolesGuard } from '../guard/role.guard';
+import { Role } from '../utils/types';
 
 @Controller('user')
 export class UserController {

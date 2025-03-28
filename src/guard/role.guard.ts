@@ -6,7 +6,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { Role } from '../utils/types';
+import { Role, SessionProps } from '../utils/types';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -23,7 +23,7 @@ export class RolesGuard implements CanActivate {
     }
     const { user } = context
       .switchToHttp()
-      .getRequest<{ user: { id: string; role: Role } }>();
+      .getRequest<{ user: SessionProps }>();
 
     if (!user) {
       return false; // No user, deny access

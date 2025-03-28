@@ -31,10 +31,10 @@ export class FetchService {
       const model = this.modelMap[modelName];
       if (!model) throw new Error('Model name is required');
 
-      const data = await model
+      const data = (await model
         .findOne(searchParams)
         .populate(populate ?? '')
-        .select(selectParms ?? '-password');
+        .select(selectParms ?? '-password')) as Model<string, any>;
 
       if (!data) {
         return {
@@ -49,7 +49,7 @@ export class FetchService {
         statusCode: HttpStatus.OK,
         success: true,
         message: message ?? 'Success',
-        data: data,
+        data: data as Record<string, any>,
       };
     } catch (error) {
       console.log(error);

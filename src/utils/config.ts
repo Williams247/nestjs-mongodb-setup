@@ -14,7 +14,7 @@ export class Config {
   static configureJWT() {
     return JwtModule.registerAsync({
       inject: [ConfigService],
-      useFactory: async function (configService: ConfigService) {
+      useFactory: function (configService: ConfigService) {
         return {
           secret: configService.get<string>('SECRET'),
           signOptions: { expiresIn: '1h' },

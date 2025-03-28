@@ -1,5 +1,5 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -8,6 +8,7 @@ import { FetchService } from '../provider/fetch.service';
 import { ServiceResponseType, DbSchema } from '../provider/types';
 import { Role } from '../utils/types';
 import { CreateUserType } from './auth.validation';
+import { LoginPayload } from '../utils/types';
 
 @Injectable()
 export class AuthService {
@@ -80,7 +81,7 @@ export class AuthService {
     }
   }
 
-  async loginUser(payload): Promise<ServiceResponseType> {
+  async loginUser(payload: LoginPayload): Promise<ServiceResponseType> {
     try {
       const loginResponse = await this.fetchService.fetchOne({
         modelName: DbSchema.USER,
@@ -103,7 +104,7 @@ export class AuthService {
 
       const userPassword = await bcrypt.compare(
         payload.password,
-        loginResponse.data.password,
+        loginResponse.data ? loginResponse.data.password : '',
       );
 
       if (!userPassword) {
@@ -115,8 +116,8 @@ export class AuthService {
       }
 
       const loginData = {
-        id: loginResponse.data._id,
-        role: loginResponse.data.role,
+        id: loginResponse?.data?._id as string,
+        role: loginResponse?.data?.role as string,
       };
 
       const signedToken = await this.jwtService.signAsync(loginData);

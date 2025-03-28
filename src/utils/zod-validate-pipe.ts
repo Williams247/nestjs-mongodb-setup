@@ -13,7 +13,7 @@ export class ZodValidationPipe implements PipeTransform {
   transform(payload: any) {
     try {
       // (try block) Validates the schema definition against payload params/input to know if it passes.
-      return this.schema.parse(payload);
+      return this.schema.parse(payload) as Record<string, any>;
     } catch (error) {
       if (error instanceof ZodError) {
         // (catch block) When validation fails, this block catches the error
@@ -27,14 +27,17 @@ export class ZodValidationPipe implements PipeTransform {
     }
   }
 
-  private getFirstError(error: ZodError): Record<string, string | number> {
+  private getFirstError(error: ZodError) {
     const formattedError = error.format(); // error.format() helps to arrange/clean the error object
 
     // Runs a loop on the formattedError object
     for (const key in formattedError) {
       // Ignores _errors: [] and checks for the first error and return it
-      if (key !== '_errors' && formattedError[key]?._errors?.length > 0) {
-        return formattedError[key]._errors[0]; // Gets the target error by index (key and 0 under _errors[])
+
+      const errorSchema = formattedError[0] as { _errors: Array<string> };
+
+      if (key !== '_errors' && errorSchema._errors.length > 0) {
+        return errorSchema; // Gets the target error by index (key and 0 under _errors[])
       }
     }
 

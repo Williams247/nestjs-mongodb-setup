@@ -44,7 +44,7 @@ export const LoginSchema = z.object({
   email: z
     .string({ message: 'An email is required' })
     .email({ message: 'Enter a valid email' }),
-    password: z
+  password: z
     .string({ message: 'Password is required' })
     .min(8, { message: 'Password must be at least 8 characters long' })
     .regex(/[A-Z]/, {
