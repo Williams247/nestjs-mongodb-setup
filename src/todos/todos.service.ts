@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Todos } from '../schema/todos.schema';
@@ -34,10 +34,11 @@ export class TodosService {
       };
     } catch (error) {
       console.log(error);
-      throw new HttpException(
-        'An error occured',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      return {
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        success: false,
+        message: 'An error occured',
+      };
     }
   }
 }

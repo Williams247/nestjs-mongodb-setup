@@ -75,7 +75,7 @@ export class AuthService {
       console.log(error);
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        success: true,
+        success: false,
         message: 'An error occured',
       };
     }
@@ -88,8 +88,6 @@ export class AuthService {
         selectParms: 'password role',
         searchParams: { email: payload.email },
       });
-
-      console.log(loginResponse);
 
       if (
         !loginResponse.success &&
@@ -110,7 +108,7 @@ export class AuthService {
       if (!userPassword) {
         return {
           statusCode: HttpStatus.CREATED,
-          success: true,
+          success: false,
           message: 'Invalid email or password',
         };
       }
@@ -130,7 +128,7 @@ export class AuthService {
       console.log(error);
       return {
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        success: true,
+        success: false,
         message: 'An error occured',
       };
     }
