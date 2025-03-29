@@ -22,6 +22,7 @@ export class ZodValidationPipe implements PipeTransform {
       }
       return {
         message: 'An error occured',
+        success: false,
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
       }; // Fall back error if (!error)
     }
@@ -43,6 +44,7 @@ export class ZodValidationPipe implements PipeTransform {
 
     return {
       message: 'An error occured',
+      success: false,
       statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
     }; // Fall back error
   }
