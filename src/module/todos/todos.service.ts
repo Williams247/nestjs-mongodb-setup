@@ -1,8 +1,8 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { Todos } from '../schema/todos.schema';
-import { ServiceResponseType } from '../provider/types';
+import { Todos } from '../../schema/todos.schema';
+import { ServiceResponseType } from '../../provider/types';
 
 @Injectable()
 export class TodosService {

@@ -1,9 +1,9 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from '../schema/user.schema';
-import { FetchService } from '../provider/fetch.service';
-import { ServiceResponseType, DbSchema } from '../provider/types';
+import { User } from '../../schema/user.schema';
+import { FetchService } from '../../provider/fetch.service';
+import { ServiceResponseType, DbSchema } from '../../provider/types';
 
 @Injectable()
 export class UserService {

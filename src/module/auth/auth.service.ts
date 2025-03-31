@@ -3,12 +3,12 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../schema/user.schema';
-import { FetchService } from '../provider/fetch.service';
-import { ServiceResponseType, DbSchema } from '../provider/types';
-import { Role } from '../utils/types';
+import { User } from '../../schema/user.schema';
+import { FetchService } from '../../provider/fetch.service';
+import { ServiceResponseType, DbSchema } from '../../provider/types';
+import { Role } from '../../utils/types';
 import { CreateUserType } from './auth.validation';
-import { LoginPayload } from '../utils/types';
+import { LoginPayload } from '../../utils/types';
 
 @Injectable()
 export class AuthService {
@@ -55,7 +55,7 @@ export class AuthService {
       }
 
       const hashPassword = await bcrypt.hash(
-        payload.password,
+        payload?.password,
         process.env.ROUND_SALT as string,
       );
 

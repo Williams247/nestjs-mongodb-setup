@@ -7,7 +7,8 @@ import {
   LoginSchema,
   LoginType,
 } from './auth.validation';
-import { ZodValidationPipe } from '../utils/zod-validate-pipe';
+import { ZodValidationPipe } from '../../utils/zod-validate-pipe';
+
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
